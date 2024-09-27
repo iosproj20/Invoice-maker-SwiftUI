@@ -20,3 +20,18 @@ class PDFEntry {
         self.pdfData = pdfData
     }
 }
+
+
+struct Product: Codable,Identifiable {
+    var id: String
+    let Name:String
+    let quantity:String
+    let price:String
+    
+    init( Name: String, quantity: String,price:String) {
+        self.id = UUID().uuidString
+        self.Name = Name
+        self.quantity = quantity
+        self.price = price
+    }
+}

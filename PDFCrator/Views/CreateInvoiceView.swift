@@ -8,26 +8,6 @@
 import SwiftUI
 import PDFKit
 import SwiftData
-struct Product: Codable,Identifiable {
-    var id: String
-    let Name:String
-    let quantity:String
-    let price:String
-    
-    init( Name: String, quantity: String,price:String) {
-        self.id = UUID().uuidString
-        self.Name = Name
-        self.quantity = quantity
-        self.price = price
-    }
-}
-
-extension UIApplication {
-    func endEditing(_ force: Bool) {
-        self.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-
 
 struct CreateInvoiceView: View {
     @Environment(\.modelContext) private var context
@@ -48,6 +28,9 @@ struct CreateInvoiceView: View {
     @State private var pdfData: Data?
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    @State private var selectedCountry: CountryModel?
+    @State private var isPickerVisible = false
+    
     
     var totalAmount: String {
         let total = productArray.reduce(0) { sum, product in
@@ -91,6 +74,10 @@ struct CreateInvoiceView: View {
             .alert(isPresented: $showAlert) {
                             Alert(title: Text("Alert"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                         }
+            .sheet(isPresented: $isPickerVisible) {
+                CountryPicker(country: $selectedCountry, countrys: $country)
+            }
+          
             NavigationLink(
                 destination: PDFPreviewView(data: pdfData ?? Data(), isfromHome: false), // Your PDF preview view
                 isActive: $showPDFPreview,
@@ -109,6 +96,7 @@ struct CreateInvoiceView: View {
             }
         }
         .navigationBarBackButtonHidden()
+       
     }
     var TopView:some View{
         VStack{
@@ -274,8 +262,25 @@ struct CreateInvoiceView: View {
             .padding([.leading,.trailing],15)
             
             VStack{
-                TextField(Strings.placeHolderEnterCountry, text: $country)
-                    .padding()
+                TextField(selectedCountry?.countryName ?? "Select Country", text: $country)
+                        .padding()
+                        .overlay(
+                            HStack{
+                                Spacer()
+                                Button(action:{
+                                    isPickerVisible.toggle()
+                                }){
+                                    VStack{
+                                        Image(ImageString.downArrow)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width:15,height: 15)
+                                    }
+                                }
+                            }
+                                .padding(.trailing,10)
+                        )
+               
             }
             .frame(width:UIScreen.main.bounds.width-30,height: 40)
             .background(Color.white)

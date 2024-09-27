@@ -44,4 +44,5 @@ struct ImageString{
     static let noData = "no-data"
     static let back = "Back"
     static let download = "download"
+    static let downArrow = "down-arrow"
 }

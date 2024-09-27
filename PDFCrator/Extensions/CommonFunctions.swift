@@ -12,6 +12,14 @@ import SwiftData
 import SwiftUI
 import PDFKit
 
+
+
+extension UIApplication {
+    func endEditing(_ force: Bool) {
+        self.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
 class CommonUtility {
     // Singleton instance
     static let shared = CommonUtility()
@@ -146,107 +154,6 @@ class CommonUtility {
             topController.present(alertController, animated: true, completion: nil)
         }
     }
-//    func downloadPDF(data: Data, completionHandler: @escaping (Bool) -> Void) {
-//        let alertController = UIAlertController(title: "Save PDF", message: "Enter a name for the PDF file", preferredStyle: .alert)
-//        alertController.addTextField { textField in
-//            textField.placeholder = "Enter file name (optional)"
-//        }
-//        
-//        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
-//            let enteredFileName = alertController.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-//            
-//            var fileName = enteredFileName?.isEmpty == false ? enteredFileName! : "Bill"
-//            fileName = self.sanitizeFileName(fileName)
-//            
-//            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//            
-//            var fileIndex = 1
-//            var pdfURL: URL
-//            
-//            repeat {
-//                pdfURL = documentsDirectory.appendingPathComponent(fileName + (enteredFileName?.isEmpty == false ? "" : "\(fileIndex)").appending(".pdf"))
-//                fileIndex += 1
-//            } while FileManager.default.fileExists(atPath: pdfURL.path)
-//            
-//            do {
-//                try data.write(to: pdfURL)
-//                print("PDF saved successfully at \(pdfURL)")
-////                let pdfEntry = PDFEntry(name: pdfURL.lastPathComponent, pdfData: data)
-////                CommonUtility.shared.addItem(pdfEntry, context: context)
-//                
-//                let activityVC = UIActivityViewController(activityItems: [pdfURL], applicationActivities: nil)
-//                if let topController = UIApplication.shared.windows.first?.rootViewController {
-//                    topController.present(activityVC, animated: true, completion: nil)
-//                }
-//
-//                // Call the completionHandler with 'true' to indicate success
-//                completionHandler(true)
-//                
-//            } catch {
-//                print("Could not save PDF: \(error.localizedDescription)")
-//                
-//                // Call the completionHandler with 'false' to indicate failure
-//                completionHandler(false)
-//            }
-//        }
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-//            // Call completion handler with 'false' in case of cancel
-//            completionHandler(false)
-//        }
-//        
-//        alertController.addAction(saveAction)
-//        alertController.addAction(cancelAction)
-//        
-//        if let topController = UIApplication.shared.windows.first?.rootViewController {
-//            topController.present(alertController, animated: true, completion: nil)
-//        }
-//    }
-//    func savePDF(data: Data, context: ModelContext) {
-//        let alertController = UIAlertController(title: "Save PDF", message: "Enter a name for the PDF file", preferredStyle: .alert)
-//        alertController.addTextField { textField in
-//            textField.placeholder = "Enter file name (optional)"
-//        }
-//        
-//        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
-//            let enteredFileName = alertController.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-//            
-//            var fileName = enteredFileName?.isEmpty == false ? enteredFileName! : "Bill"
-//            fileName = self.sanitizeFileName(fileName)
-//            
-//            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//            
-//            var fileIndex = 1
-//            var pdfURL: URL
-//            
-//            repeat {
-//                pdfURL = documentsDirectory.appendingPathComponent(fileName + (enteredFileName?.isEmpty == false ? "" : "\(fileIndex)").appending(".pdf"))
-//                fileIndex += 1
-//            } while FileManager.default.fileExists(atPath: pdfURL.path)
-//            
-//            do {
-//                try data.write(to: pdfURL)
-//                print("PDF saved successfully at \(pdfURL)")
-//                let pdfEntry = PDFEntry(name: pdfURL.lastPathComponent, pdfData: data)
-//                CommonUtility.shared.addItem(pdfEntry, context: context)
-//                let activityVC = UIActivityViewController(activityItems: [pdfURL], applicationActivities: nil)
-//                if let topController = UIApplication.shared.windows.first?.rootViewController {
-//                    topController.present(activityVC, animated: true, completion: nil)
-//                }
-//                
-//            } catch {
-//                print("Could not save PDF: \(error.localizedDescription)")
-//            }
-//        }
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-//        alertController.addAction(saveAction)
-//        alertController.addAction(cancelAction)
-//        
-//        if let topController = UIApplication.shared.windows.first?.rootViewController {
-//            topController.present(alertController, animated: true, completion: nil)
-//        }
-//    }
     private func sanitizeFileName(_ fileName: String) -> String {
         let invalidCharacters = CharacterSet(charactersIn: "/\\?%*|\"<>:.")
         return fileName.components(separatedBy: invalidCharacters).joined(separator: "")
@@ -311,7 +218,7 @@ class CommonUtility {
             blueLinePath.move(to: CGPoint(x: 20, y: 235))
             blueLinePath.addLine(to: CGPoint(x: pageWidth - 20, y: 235))
             blueLinePath.lineWidth = 1
-            UIColor.blue.setStroke()
+            UIColor.black.setStroke()
             blueLinePath.stroke()
             
             // Add some spacing between the line and the table
@@ -397,7 +304,7 @@ class CommonUtility {
             blueLinePathAfterTable.move(to: CGPoint(x: 20, y: yAfterTable + 5))
             blueLinePathAfterTable.addLine(to: CGPoint(x: pageWidth - 20, y: yAfterTable + 5))
             blueLinePathAfterTable.lineWidth = 1
-            UIColor.blue.setStroke()
+            UIColor.black.setStroke()
             blueLinePathAfterTable.stroke()
         }
         
